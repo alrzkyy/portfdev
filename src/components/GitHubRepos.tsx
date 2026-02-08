@@ -72,7 +72,7 @@ export default function GitHubRepos() {
     }, []);
 
     return (
-        <BentoCard colSpan={2}>
+        <BentoCard colSpan={1}>
             <div className="mb-4">
                 <h3 className="text-xl font-bold gold-text-gradient mb-1">
                     GitHub Repositories
@@ -82,7 +82,7 @@ export default function GitHubRepos() {
                 </p>
             </div>
 
-            <div className={`grid gap-4 ${repos.length > 1 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
+            <div className="grid gap-4 grid-cols-1">
                 {repos.map((repo, index) => (
                     <motion.a
                         key={repo.name}

@@ -23,7 +23,7 @@ const projects: Project[] = [
 
 export default function ProjectDownloadCenter() {
     return (
-        <BentoCard colSpan={1}>
+        <BentoCard colSpan={1} className="h-fit">
             <div className="mb-4">
                 <h3 className="text-xl font-bold gold-text-gradient mb-1">
                     Download
@@ -33,7 +33,7 @@ export default function ProjectDownloadCenter() {
                 </p>
             </div>
 
-            <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="flex flex-col gap-3">
                 {projects.map((project, index) => (
                     <motion.div
                         key={project.name}

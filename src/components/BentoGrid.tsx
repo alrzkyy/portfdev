@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+
 import { ReactNode } from 'react';
 
 interface BentoGridProps {
@@ -9,30 +9,25 @@ interface BentoGridProps {
 
 export default function BentoGrid({ children }: BentoGridProps) {
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-auto gap-4 p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 p-4 max-w-7xl mx-auto w-full">
             {children}
-        </motion.div>
+        </div>
     );
 }
 
 interface BentoCardProps {
     children: ReactNode;
     className?: string;
-    colSpan?: 1 | 2 | 3 | 4;
+    colSpan?: 1 | 2 | 3;
     rowSpan?: 1 | 2;
+    delay?: number;
 }
 
-export function BentoCard({ children, className = '', colSpan = 1, rowSpan = 1 }: BentoCardProps) {
+export function BentoCard({ children, className = '', colSpan = 1, rowSpan = 1, delay = 0 }: BentoCardProps) {
     const colSpanClass = {
         1: 'md:col-span-1',
         2: 'md:col-span-2',
         3: 'md:col-span-3',
-        4: 'md:col-span-4',
     }[colSpan];
 
     const rowSpanClass = {
@@ -41,14 +36,12 @@ export function BentoCard({ children, className = '', colSpan = 1, rowSpan = 1 }
     }[rowSpan];
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            whileHover={{ y: -5, scale: 1.01 }}
-            className={`bg-[var(--card-bg)] rounded-[var(--radius-lg)] p-6 card-border hover:gold-glow transition-all duration-300 ${colSpanClass} ${rowSpanClass} ${className} flex flex-col`}
+        <div
+            data-aos="fade-up"
+            data-aos-delay={delay}
+            className={`bg-[var(--card-bg)] rounded-[var(--radius-lg)] p-6 card-border hover:gold-glow transition-all duration-300 ${colSpanClass} ${rowSpanClass} ${className} flex flex-col group`}
         >
             {children}
-        </motion.div>
+        </div>
     );
 }
