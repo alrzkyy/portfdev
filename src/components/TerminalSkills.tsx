@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { BentoCard } from './BentoGrid';
-import { Terminal, Mail, Smartphone, Code2, Briefcase, Trophy } from 'lucide-react';
+import { Terminal, Mail, Smartphone, Code2, Briefcase, Trophy, Globe, Cpu, Layout } from 'lucide-react';
 import { siDart, siJavascript, siPython, siReact } from 'simple-icons';
 
 interface CommandHistory {
@@ -12,15 +12,37 @@ interface CommandHistory {
 
 export default function TerminalSkills() {
     const [input, setInput] = useState('');
-    const [history, setHistory] = useState<CommandHistory[]>([
-        { command: 'help', output: 'Type "help" to see available commands.' }
-    ]);
+    const [history, setHistory] = useState<CommandHistory[]>([]);
+    const [isBooting, setIsBooting] = useState(true);
     const inputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     const focusInput = () => {
         inputRef.current?.focus();
     };
+
+    useEffect(() => {
+        const bootSequence = [
+            'Initializing Alrzkyy-OS v1.0.4...',
+            'Loading kernel modules...',
+            'Network interface established...',
+            'Welcome, guest user.',
+            'Type "help" to see available commands.'
+        ];
+
+        let currentLine = 0;
+        const interval = setInterval(() => {
+            if (currentLine < bootSequence.length) {
+                setHistory(prev => [...prev, { command: '', output: <span className="text-[var(--text-secondary)] opacity-70 italic">{bootSequence[currentLine]}</span> }]);
+                currentLine++;
+            } else {
+                setIsBooting(false);
+                clearInterval(interval);
+            }
+        }, 300);
+
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -34,188 +56,156 @@ export default function TerminalSkills() {
             case 'help':
                 output = (
                     <div className="flex flex-col gap-1 text-[var(--text-secondary)]">
-                        <p>Available commands:</p>
-                        <div className="pl-4 grid grid-cols-[100px_1fr] gap-2">
-                            <span className="text-[var(--luxury-gold)]">about</span>
-                            <span>About me (interactive)</span>
-                            <span className="text-[var(--luxury-gold)]">role</span>
-                            <span>View current role</span>
-                            <span className="text-[var(--luxury-gold)]">skills</span>
-                            <span>View technical skills</span>
-                            <span className="text-[var(--luxury-gold)]">stats</span>
-                            <span>View github stats</span>
-                            <span className="text-[var(--luxury-gold)]">contact</span>
-                            <span>View contact info</span>
-                            <span className="text-[var(--luxury-gold)]">clear</span>
-                            <span>Clear terminal</span>
+                        <p className="text-white font-bold mb-1">Available System Commands:</p>
+                        <div className="pl-4 grid grid-cols-[100px_1fr] gap-x-4 gap-y-1">
+                            <span className="text-[var(--luxury-gold)] font-mono">about</span>
+                            <span>Detailed developer dossier</span>
+                            <span className="text-[var(--luxury-gold)] font-mono">projects</span>
+                            <span>Explore highlighted repositories</span>
+                            <span className="text-[var(--luxury-gold)] font-mono">skills</span>
+                            <span>Technical proficiency analysis</span>
+                            <span className="text-[var(--luxury-gold)] font-mono">stats</span>
+                            <span>GitHub & activity metrics</span>
+                            <span className="text-[var(--luxury-gold)] font-mono">contact</span>
+                            <span>Communication channels</span>
+                            <span className="text-[var(--luxury-gold)] font-mono">clear</span>
+                            <span>Flush terminal buffer</span>
                         </div>
                     </div>
                 );
                 break;
             case 'about':
-                const aboutText = `system.getProfile("alrzkyy")
+                output = (
+                    <div className="flex flex-col gap-4">
+                        <pre className="text-[var(--luxury-gold)] text-[10px] leading-none opacity-80">
+                            {`    ___    __           __              __
+   /   |  / /________  / /____  ____  __/ /_
+  / /| | / / ___/_  / / //_/\ \/ / / / / __ \\
+ / ___ |/ / /    / /_/ ,<    \  / /_/ / /_/ /
+/_/  |_/_/_/    /___/_/|_|   /_/\__, /_.___/
+                               /____/`}
+                        </pre>
+                        <TypewriterText
+                            text={`system.getProfile("alrzkyy")
 
 {
   "name": "Alrzkyy",
-  "role": "Frontend/Backend and Mobileapp beginner",
-  "status": "Student",
-  "location": "Indonesia",
-  "biography": "An aspiring developer with a strong passion for building clean and responsive interfaces across Web and Mobile platforms. Currently in the process of mastering Frontend technologies while actively exploring the fundamentals of Backend and Mobile App development, I combine foundational knowledge with a dedicated learning approach to deliver functional digital experiences.",
-  "technical_stack": [
-    "JavaScript (ES6+)", 
-    "Flutter", 
-    "React Framework", 
-    "Python"
-  ],
-  "current_focus": "Deepening knowledge in React.js and Frontend Architecture",
-  "contact": "Available via GitHub or Email for communicate"
-}`;
-                output = (
-                    <TypewriterText
-                        text={aboutText}
-                        onComplete={() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                    />
+  "role": "Fullstack & Mobile Developer",
+  "status": "Student / Aspiring Engineer",
+  "location": "Indonesia 🇮🇩",
+  "biography": "An aspiring developer with a strong passion for building clean and responsive interfaces across Web and Mobile platforms. Focused on mastering Frontend technologies while expanding into Backend and Flutter ecosystems.",
+  "technical_stack": ["Dart", "Flutter", "React", "Next.js", "Python"],
+  "current_focus": "Architecting scalable React applications",
+  "motto": "Transforming complex problems into elegant code."
+}`}
+                            onComplete={() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                        />
+                    </div>
                 );
                 break;
-            case 'role':
+            case 'projects':
                 output = (
-                    <div className="my-2 p-3 rounded-lg border border-[var(--border-gold)]/30 bg-[var(--pure-black)]/30 backdrop-blur-sm w-fit group hover:border-[var(--luxury-gold)] transition-all">
-                        <div className="flex items-center gap-3">
-                            <div className="text-3xl animate-bounce">
-                                👨‍💻
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-xl font-bold font-sans bg-gradient-to-r from-[#4ADE80] via-[var(--luxury-gold)] to-[#4ADE80] bg-[length:200%_auto] animate-gradient bg-clip-text text-transparent">
-                                    Beginner Developer
-                                </span>
-                                <span className="text-xs text-[var(--text-secondary)] italic mt-0.5 flex items-center gap-1">
-                                    Crafting digital experiences <span className="animate-pulse">✨</span>
-                                </span>
-                            </div>
+                    <div className="flex flex-col gap-3 my-2">
+                        <p className="text-white border-b border-[var(--border-gold)] pb-1 mb-1">Highlighted Deployments:</p>
+                        <div className="grid grid-cols-1 gap-4">
+                            {[
+                                { name: 'Astraplan', stack: 'Flutter / Dart', desc: 'Productivity & Study Planning Ecosystem' },
+                                { name: 'Alrzkyy-WebDev', stack: 'Next.js / TS', desc: 'Premium Dashboard WebDev' },
+                                { name: 'Finsight', stack: 'Flutter / Dart', desc: 'Finsight is a daily financial application that helps to calculate expenses and income.' }
+                            ].map((p, i) => (
+                                <div key={i} className="flex flex-col gap-1 pl-2 border-l-2 border-[var(--luxury-gold)]">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[var(--luxury-gold)] font-bold">{p.name}</span>
+                                        <span className="text-[10px] bg-[var(--luxury-gold)]/10 px-1.5 py-0.5 rounded text-[var(--luxury-gold)]">{p.stack}</span>
+                                    </div>
+                                    <span className="text-xs text-[var(--text-secondary)]">{p.desc}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 );
                 break;
             case 'skills':
                 output = (
-                    <div className="flex flex-col gap-1 font-mono text-sm">
-                        <div className="flex justify-between items-center max-w-[350px]">
-                            <div className="flex items-center gap-2">
-                                <svg role="img" viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: '#0175C2' }}>
-                                    <path d={siDart.path} />
-                                </svg>
-                                <span>Dart</span>
+                    <div className="flex flex-col gap-3 font-mono text-sm max-w-[400px]">
+                        {[
+                            { name: 'Dart/Flutter', icon: siDart.path, color: '#0175C2', level: 85 },
+                            { name: 'JavaScript/React', icon: siJavascript.path, color: '#F7DF1E', level: 80 },
+                            { name: 'Python', icon: siPython.path, color: '#3776AB', level: 75 },
+                            { name: 'UI/UX Design', icon: null, color: '#D4AF37', level: 70 },
+                        ].map((s, i) => (
+                            <div key={i} className="flex flex-col gap-1">
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2">
+                                        {s.icon ? (
+                                            <svg role="img" viewBox="0 0 24 24" className="w-3.5 h-3.5" style={{ fill: s.color }}>
+                                                <path d={s.icon} />
+                                            </svg>
+                                        ) : <Layout className="w-3.5 h-3.5 text-[var(--luxury-gold)]" />}
+                                        <span>{s.name}</span>
+                                    </div>
+                                    <span className="text-[var(--luxury-gold)] text-xs">{s.level}%</span>
+                                </div>
+                                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-gradient-to-r from-[var(--luxury-gold)] to-yellow-200"
+                                        style={{ width: `${s.level}%` }}
+                                    />
+                                </div>
                             </div>
-                            <span className="text-[var(--luxury-gold)]">███████░░░ 73%</span>
-                        </div>
-                        <div className="flex justify-between items-center max-w-[350px]">
-                            <div className="flex items-center gap-2">
-                                <svg role="img" viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: '#F7DF1E' }}>
-                                    <path d={siJavascript.path} />
-                                </svg>
-                                <span>JavaScript</span>
-                            </div>
-                            <span className="text-[var(--luxury-gold)]">████████░░ 80%</span>
-                        </div>
-                        <div className="flex justify-between items-center max-w-[350px]">
-                            <div className="flex items-center gap-2">
-                                <svg role="img" viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: '#3776AB' }}>
-                                    <path d={siPython.path} />
-                                </svg>
-                                <span>Python</span>
-                            </div>
-                            <span className="text-[var(--luxury-gold)]">███████░░░ 79%</span>
-                        </div>
-                        <div className="flex justify-between items-center max-w-[350px]">
-                            <div className="flex items-center gap-2">
-                                <svg role="img" viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: '#61DAFB' }}>
-                                    <path d={siReact.path} />
-                                </svg>
-                                <span>React</span>
-                            </div>
-                            <span className="text-[var(--luxury-gold)]">███████░░░ 76%</span>
-                        </div>
+                        ))}
                     </div>
                 );
                 break;
             case 'stats':
                 output = (
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-2">
-                        {/* Projects Stat */}
-                        <div className="p-3 rounded-lg border border-[var(--border-gold)]/30 bg-[var(--pure-black)]/30 hover:bg-[var(--luxury-gold)]/5 transition-all group">
-                            <div className="flex items-center gap-3 mb-1">
-                                <Briefcase className="w-4 h-4 text-[var(--luxury-gold)] group-hover:rotate-12 transition-transform" />
-                                <span className="text-xs text-[var(--text-secondary)]">Projects</span>
+                        <div className="p-3 rounded-lg border border-[var(--border-gold)]/20 bg-white/5 group hover:bg-[var(--luxury-gold)]/5 transition-all">
+                            <div className="flex items-center gap-2 mb-1">
+                                <Globe className="w-3.5 h-3.5 text-blue-400" />
+                                <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Uptime</span>
                             </div>
-                            <div className="text-lg font-bold text-white group-hover:text-[var(--luxury-gold)] transition-colors">
-                                16+
-                            </div>
-                            <div className="text-[10px] text-gray-500">Completed Live & Unknown</div>
+                            <div className="text-lg font-bold">99.9%</div>
                         </div>
-
-                        {/* Stack Stat */}
-                        <div className="p-3 rounded-lg border border-[var(--border-gold)]/30 bg-[var(--pure-black)]/30 hover:bg-[var(--luxury-gold)]/5 transition-all group">
-                            <div className="flex items-center gap-3 mb-1">
-                                <Code2 className="w-4 h-4 text-[#4ADE80] group-hover:scale-110 transition-transform" />
-                                <span className="text-xs text-[var(--text-secondary)]">Top Stack</span>
+                        <div className="p-3 rounded-lg border border-[var(--border-gold)]/20 bg-white/5 group hover:bg-[var(--luxury-gold)]/5 transition-all">
+                            <div className="flex items-center gap-2 mb-1">
+                                <Cpu className="w-3.5 h-3.5 text-green-400" />
+                                <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Commits</span>
                             </div>
-                            <div className="text-lg font-bold text-white group-hover:text-[#4ADE80] transition-colors">
-                                Dart / JavaScript
-                            </div>
-                            <div className="text-[10px] text-gray-500">Most Used Languages</div>
+                            <div className="text-lg font-bold">1.2k+</div>
                         </div>
-
-                        {/* Focus Stat */}
-                        <div className="p-3 rounded-lg border border-[var(--border-gold)]/30 bg-[var(--pure-black)]/30 hover:bg-[var(--luxury-gold)]/5 transition-all group">
-                            <div className="flex items-center gap-3 mb-1">
-                                <Trophy className="w-4 h-4 text-[#F472B6] group-hover:animate-bounce transition-transform" />
-                                <span className="text-xs text-[var(--text-secondary)]">Focus</span>
+                        <div className="p-3 rounded-lg border border-[var(--border-gold)]/20 bg-white/5 group hover:bg-[var(--luxury-gold)]/5 transition-all">
+                            <div className="flex items-center gap-2 mb-1">
+                                <Trophy className="w-3.5 h-3.5 text-yellow-400" />
+                                <span className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">Level</span>
                             </div>
-                            <div className="text-lg font-bold text-white group-hover:text-[#F472B6] transition-colors">
-                                Flutter & React Framework
-                            </div>
-                            <div className="text-[10px] text-gray-500">Current Learning Path</div>
+                            <div className="text-lg font-bold">Beginner+</div>
                         </div>
                     </div>
                 );
                 break;
             case 'contact':
                 output = (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 mb-2">
-                        <a
-                            href="https://wa.me/2347020887193?text=Permisi"
-                            target="_blank"
-                            className="flex items-center gap-4 p-3 rounded-lg border border-[var(--border-gold)] bg-[var(--pure-black)]/50 hover:bg-[var(--luxury-gold)]/10 hover:border-[var(--luxury-gold)] transition-all group"
-                        >
-                            <div className="p-3 rounded-full bg-[var(--luxury-gold)]/10 text-[var(--luxury-gold)] group-hover:scale-110 transition-transform">
-                                <Smartphone className="w-6 h-6" />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-lg font-bold text-white group-hover:text-[var(--luxury-gold)] transition-colors">WhatsApp</span>
-                                <span className="text-xs text-[var(--text-secondary)]">+234 702 088 7193</span>
-                            </div>
-                        </a>
-
-                        <a
-                            href="mailto:alrzkyy@gmail.com"
-                            className="flex items-center gap-4 p-3 rounded-lg border border-[var(--border-gold)] bg-[var(--pure-black)]/50 hover:bg-[var(--luxury-gold)]/10 hover:border-[var(--luxury-gold)] transition-all group"
-                        >
-                            <div className="p-3 rounded-full bg-[var(--luxury-gold)]/10 text-[var(--luxury-gold)] group-hover:scale-110 transition-transform">
-                                <Mail className="w-6 h-6" />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-lg font-bold text-white group-hover:text-[var(--luxury-gold)] transition-colors">Email</span>
-                                <span className="text-xs text-[var(--text-secondary)]">alrzkyy@gmail.com</span>
-                            </div>
-                        </a>
+                    <div className="flex flex-col gap-2 mt-2">
+                        <p className="text-xs text-[var(--text-secondary)] mb-1">Establishing secure connection protocols...</p>
+                        <div className="flex flex-wrap gap-2">
+                            <a href="mailto:alrzkyy@gmail.com" className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-[var(--border-gold)]/30 hover:bg-[var(--luxury-gold)]/10 transition-colors">
+                                <Mail className="w-4 h-4 text-[var(--luxury-gold)]" />
+                                <span className="text-sm">Email</span>
+                            </a>
+                            <a href="https://wa.me/2347020887193" target="_blank" className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-[var(--border-gold)]/30 hover:bg-[var(--luxury-gold)]/10 transition-colors">
+                                <Smartphone className="w-4 h-4 text-green-500" />
+                                <span className="text-sm">WhatsApp</span>
+                            </a>
+                        </div>
                     </div>
                 );
                 break;
             case 'clear':
-                setHistory([]);
+                setHistory([{ command: '', output: <span className="text-[var(--text-secondary)] opacity-40 italic">Terminal buffer cleared successfully.</span> }]);
                 return;
             default:
-                output = <span className="text-red-500">Command not found: {trimmedCmd}</span>;
+                output = <span className="text-red-500 font-bold">ERR_UNKNOWN_CMD: {trimmedCmd}</span>;
         }
 
         setHistory(prev => [...prev, { command: cmd, output }]);
@@ -231,66 +221,71 @@ export default function TerminalSkills() {
     };
 
     return (
-        <BentoCard colSpan={2} className="min-h-[300px] flex flex-col p-0 overflow-hidden bg-[#0c0c0c] border-[var(--border-gold)]">
+        <BentoCard colSpan={2} className="min-h-[340px] flex flex-col p-0 overflow-hidden bg-[#0a0a0a] border-[var(--border-gold)] relative">
             {/* Terminal Header */}
-            <div className="flex items-center justify-between px-4 py-2 bg-[#1e1e1e] border-b border-[#333]">
+            <div className="flex items-center justify-between px-4 py-2 bg-[#161616] border-b border-[#2d2d2d]">
                 <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
-                    <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-                    <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+                    <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                        <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                        <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
+                    </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-[#888] font-mono">
+                <div className="flex items-center gap-2 text-[10px] text-[#666] font-mono tracking-widest uppercase">
                     <Terminal className="w-3 h-3" />
-                    <span>guest@alrzkyy:~</span>
+                    <span>system-terminal-core</span>
                 </div>
                 <div className="w-10" />
             </div>
 
             {/* Terminal Body */}
             <div
-                className="flex-1 p-4 font-mono text-sm overflow-y-auto custom-scrollbar cursor-text"
+                className="flex-1 p-5 font-mono text-[13px] overflow-y-auto custom-scrollbar cursor-text relative"
                 onClick={focusInput}
             >
-                <div className="flex flex-col gap-2">
-                    {/* Welcome Message */}
-                    {history.length === 1 && history[0].command === 'help' && (
-                        <div className="mb-4 text-[var(--text-secondary)]">
-                            <p>Welcome to alrzkyy terminal v1.0.0</p>
-                            <p>Type <span className="text-[var(--luxury-gold)]">'help'</span> to get started.</p>
-                        </div>
-                    )}
-
+                <div className="flex flex-col gap-3">
                     {history.map((item, index) => (
-                        <div key={index} className="flex flex-col gap-1">
-                            <div className="flex items-center gap-2">
-                                <span className="text-[var(--luxury-gold)]">➜</span>
-                                <span className="text-[#4ADE80]">~</span>
-                                <span>{item.command}</span>
-                            </div>
-                            <div className="pl-4 pb-2 text-gray-300">
+                        <div key={index} className="flex flex-col gap-1.5 animation-fade-in">
+                            {item.command && (
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[var(--luxury-gold)]">guest@alrzkyy</span>
+                                    <span className="text-white/40">:</span>
+                                    <span className="text-[#4ADE80]">~</span>
+                                    <span className="text-white/40">$</span>
+                                    <span className="text-white">{item.command}</span>
+                                </div>
+                            )}
+                            <div className={item.command ? "pl-4 text-gray-300" : ""}>
                                 {item.output}
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="flex items-center gap-2 mt-2">
-                    <span className="text-[var(--luxury-gold)]">➜</span>
-                    <span className="text-[#4ADE80]">~</span>
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        className="flex-1 bg-transparent outline-none border-none text-white focus:ring-0 p-0"
-                        autoFocus
-                        spellCheck={false}
-                        autoComplete="off"
-                    />
-                </div>
-                <div ref={bottomRef} />
+                {!isBooting && (
+                    <div className="flex items-center gap-2 mt-4">
+                        <span className="text-[var(--luxury-gold)] font-bold">guest@alrzkyy</span>
+                        <span className="text-white/40">:</span>
+                        <span className="text-[#4ADE80]">~</span>
+                        <span className="text-white/40">$</span>
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className="flex-1 bg-transparent outline-none border-none text-white focus:ring-0 p-0 font-mono"
+                            autoFocus
+                            spellCheck={false}
+                            autoComplete="off"
+                        />
+                    </div>
+                )}
+                <div ref={bottomRef} className="h-4" />
             </div>
+
+            {/* Scanline Effect */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
         </BentoCard>
     );
 }
@@ -304,7 +299,7 @@ function TypewriterText({ text, onComplete }: { text: string; onComplete?: () =>
             const timeout = setTimeout(() => {
                 setDisplayedText(prev => prev + text[currentIndex]);
                 setCurrentIndex(prev => prev + 1);
-            }, 5); // Faster typing speed
+            }, 8);
             return () => clearTimeout(timeout);
         } else {
             onComplete?.();
@@ -312,49 +307,29 @@ function TypewriterText({ text, onComplete }: { text: string; onComplete?: () =>
     }, [currentIndex, text, onComplete]);
 
     const highlightSyntax = (content: string) => {
-        // Split by newlines to handle formatting line by line if needed, 
-        // but simple regex replace on the whole string is easier for this specific case.
-
-        // We'll use a simple parser strategy: identify parts and wrap them
-        // Note: This is a visual approximation for CLI vibes, not a full JSON parser
-
         const parts = content.split(/(".*?"|system\.getProfile|\(|\)|\[|\]|\{|\}|:|,)/g);
 
         return parts.map((part, index) => {
             if (!part) return null;
 
             if (part.startsWith('"')) {
-                // Check if it's a key or value based on context (simplified)
-                // If followed by :, it's a key (usually). But we split by : so we can't look ahead easily in map.
-                // Actually, in JSON, keys are strings before :.
-
-                // Let's rely on coloring all strings one color first
-                // But user wants "important parts colored".
-
-                // Heuristic: If it looks like a key name (no spaces, standard keys), maybe color A
-                // If it's a value (longer sentence), color B
-
-                // Better regex/split approach:
-                // Just color all strings green first? Or keys Cyan?
-
-                // Let's look at the specific keys in the user request
-                if (['"name"', '"role"', '"status"', '"location"', '"biography"', '"technical_stack"', '"current_focus"', '"contact"'].includes(part)) {
+                if (['"name"', '"role"', '"status"', '"location"', '"biography"', '"technical_stack"', '"current_focus"', '"contact"', '"motto"'].includes(part)) {
                     return <span key={index} className="text-blue-400">{part}</span>;
                 }
-                return <span key={index} className="text-[#a5d6ff]">{part}</span>; // default string color (light blue/green)
+                return <span key={index} className="text-[#a5d6ff]">{part}</span>;
             }
             if (part === 'system.getProfile') return <span key={index} className="text-yellow-500 font-bold">{part}</span>;
             if (['{', '}', '[', ']', '(', ')'].includes(part)) return <span key={index} className="text-gray-500">{part}</span>;
             if (part === ':') return <span key={index} className="text-gray-400">{part}</span>;
 
-            return <span key={index} className="text-[var(--text-primary)]">{part}</span>;
+            return <span key={index} className="text-white/90">{part}</span>;
         });
     };
 
     return (
-        <span className="text-[var(--text-primary)] whitespace-pre-wrap block font-mono leading-relaxed">
+        <span className="text-white/90 whitespace-pre-wrap block font-mono leading-relaxed">
             {highlightSyntax(displayedText)}
-            {currentIndex < text.length && <span className="animate-pulse text-[var(--luxury-gold)] block">_</span>}
+            {currentIndex < text.length && <span className="inline-block w-2 h-4 bg-[var(--luxury-gold)] ml-1 animate-pulse" />}
         </span>
     );
 }

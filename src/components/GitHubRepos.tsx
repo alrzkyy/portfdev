@@ -1,7 +1,7 @@
 'use client';
 
 import { BentoCard } from './BentoGrid';
-import { Star, GitFork, ExternalLink } from 'lucide-react';
+import { Star, GitFork, ExternalLink, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
@@ -20,7 +20,7 @@ const fallbackRepos: Repository[] = [
         description: 'Personal portf dashboard versi awal',
         stars: 12,
         forks: 3,
-        url: 'https://github.com/alrzkyy',
+        url: 'https://github.com/alrzkyy/alrzkyy-portf',
         language: 'TypeScript',
     },
     {
@@ -28,7 +28,15 @@ const fallbackRepos: Repository[] = [
         description: 'Advanced study planning and productivity application',
         stars: 8,
         forks: 2,
-        url: 'https://github.com/alrzkyy',
+        url: 'https://github.com/alrzkyy/astraplan',
+        language: 'Dart',
+    },
+    {
+        name: 'finsight',
+        description: 'AI-powered financial assistant for daily income and expense analysis.',
+        stars: 15,
+        forks: 4,
+        url: 'https://github.com/alrzkyy/finsight',
         language: 'Dart',
     },
     {
@@ -47,7 +55,7 @@ export default function GitHubRepos() {
 
     useEffect(() => {
         // Attempt to fetch real repos from GitHub API
-        fetch('https://api.github.com/users/alrzkyy/repos?sort=stars&per_page=3')
+        fetch('https://api.github.com/users/alrzkyy/repos?sort=stars&per_page=6')
             .then((res) => res.json())
             .then((data) => {
                 if (Array.isArray(data) && data.length > 0) {
@@ -63,66 +71,85 @@ export default function GitHubRepos() {
                 }
             })
             .catch(() => {
-                // Use fallback repos on error
                 console.log('Using fallback repositories');
             })
             .finally(() => {
-                setLoading(false);
+                setTimeout(() => setLoading(false), 800); // Small delay for visual effect
             });
     }, []);
 
     return (
-        <BentoCard colSpan={1}>
-            <div className="mb-4">
-                <h3 className="text-xl font-bold gold-text-gradient mb-1">
-                    GitHub Repositories
-                </h3>
-                <p className="text-sm text-[var(--text-secondary)]">
-                    Top projects and contributions
+        <BentoCard colSpan={1} rowSpan={2} className="relative overflow-hidden">
+            <div className="mb-6">
+                <div className="flex items-center gap-2 mb-1">
+                    <Github className="w-4 h-4 text-[var(--luxury-gold)]" />
+                    <h3 className="text-xl font-bold gold-text-gradient">
+                        Open Source
+                    </h3>
+                </div>
+                <p className="text-xs text-[var(--text-secondary)] opacity-60 uppercase tracking-widest">
+                    Featured Repositories
                 </p>
             </div>
 
-            <div className="grid gap-4 grid-cols-1">
-                {repos.map((repo, index) => (
-                    <motion.a
-                        key={repo.name}
-                        href={repo.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex flex-col h-full p-4 rounded-lg bg-[var(--pure-black)] border border-[var(--border-gold)] hover:border-[var(--luxury-gold)] hover:gold-glow transition-all group"
-                    >
-                        <div className="flex items-start justify-between mb-2">
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between gap-2">
-                                    <h4 className="text-lg font-bold text-white group-hover:text-[var(--luxury-gold)] transition-colors truncate">
-                                        {repo.name}
-                                    </h4>
-                                    <ExternalLink className="w-4 h-4 flex-shrink-0 text-[var(--text-secondary)] opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="grid gap-3 grid-cols-1 overflow-y-auto max-h-[800px] custom-scrollbar pr-1">
+                {loading ? (
+                    [1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="h-[100px] rounded-lg bg-white/5 border border-white/5 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-shimmer" />
+                        </div>
+                    ))
+                ) : (
+                    repos.map((repo, index) => (
+                        <motion.a
+                            key={repo.name}
+                            href={repo.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            whileHover={{ scale: 1.02 }}
+                            className="flex flex-col h-full p-4 rounded-lg bg-[var(--pure-black)] border border-[var(--border-gold)] hover:border-[var(--luxury-gold)] hover:gold-glow transition-all group relative overflow-hidden"
+                        >
+                            <div className="flex items-start justify-between mb-2 relative z-10">
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2">
+                                        <h4 className="text-sm font-bold text-white group-hover:text-[var(--luxury-gold)] transition-colors truncate">
+                                            {repo.name}
+                                        </h4>
+                                        <ExternalLink className="w-3 h-3 flex-shrink-0 text-[var(--text-secondary)] opacity-0 group-hover:opacity-100 transition-all -translate-y-1 group-hover:translate-y-0" />
+                                    </div>
+                                    <p className="text-[10px] text-[var(--text-secondary)] mt-1 line-clamp-2 min-h-[28px] opacity-70">
+                                        {repo.description}
+                                    </p>
                                 </div>
-                                <p className="text-sm text-[var(--text-secondary)] mt-1 line-clamp-2 min-h-[40px]">
-                                    {repo.description}
-                                </p>
                             </div>
-                        </div>
 
-                        <div className="flex items-center gap-4 mt-auto">
-                            <span className="text-xs px-2 py-1 rounded-full bg-[var(--luxury-gold)]/10 text-[var(--luxury-gold)]">
-                                {repo.language}
-                            </span>
-                            <div className="flex items-center gap-1 text-[var(--text-secondary)]">
-                                <Star className="w-3.5 h-3.5" />
-                                <span className="text-xs">{repo.stars}</span>
+                            <div className="flex items-center gap-4 mt-2 relative z-10">
+                                <div className="flex items-center gap-1.5">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[var(--luxury-gold)]" />
+                                    <span className="text-[9px] font-medium text-[var(--text-secondary)]">
+                                        {repo.language}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-3 ml-auto">
+                                    <div className="flex items-center gap-1 text-[var(--text-secondary)]">
+                                        <Star className="w-2.5 h-2.5 group-hover:text-yellow-400 transition-colors" />
+                                        <span className="text-[9px]">{repo.stars}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1 text-[var(--text-secondary)]">
+                                        <GitFork className="w-2.5 h-2.5 group-hover:text-[#4ADE80] transition-colors" />
+                                        <span className="text-[9px]">{repo.forks}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-1 text-[var(--text-secondary)]">
-                                <GitFork className="w-3.5 h-3.5" />
-                                <span className="text-xs">{repo.forks}</span>
-                            </div>
-                        </div>
-                    </motion.a>
-                ))}
+
+                            {/* Hover Ambient Light */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--luxury-gold)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </motion.a>
+                    ))
+                )}
             </div>
         </BentoCard>
     );

@@ -52,12 +52,12 @@ const socialLinks: SocialLink[] = [
 
 export default function QuickLinks() {
     return (
-        <BentoCard>
-            <h3 className="text-sm font-semibold text-[var(--text-secondary)] mb-4">
-                QUICK LINKS
+        <BentoCard className="flex flex-col">
+            <h3 className="text-xs font-bold text-[var(--text-secondary)] opacity-50 mb-6 uppercase tracking-[0.2em]">
+                Quick Links
             </h3>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4 flex-1">
                 {socialLinks.map((link, index) => (
                     <motion.a
                         key={link.name}
@@ -66,21 +66,27 @@ export default function QuickLinks() {
                         rel="noopener noreferrer"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: index * 0.05 }}
                         whileHover={{ scale: 1.05 }}
-                        className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-[var(--pure-black)] border border-[var(--border-gold)] hover:border-[var(--luxury-gold)] hover:gold-glow transition-all group"
+                        className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl bg-[var(--pure-black)] border border-[var(--border-gold)] hover:border-[var(--luxury-gold)] hover:gold-glow transition-all group relative overflow-hidden"
                     >
                         <svg
                             role="img"
                             viewBox="0 0 24 24"
-                            className="w-6 h-6 transition-colors"
+                            className="w-6 h-6 transition-all duration-300 group-hover:scale-110"
                             style={{ fill: 'var(--luxury-gold)' }}
                         >
                             <path d={link.icon} />
                         </svg>
-                        <span className="text-xs font-medium text-[var(--text-secondary)] group-hover:text-[var(--luxury-gold)] transition-colors">
+                        <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--luxury-gold)] transition-colors uppercase tracking-widest">
                             {link.name}
                         </span>
+
+                        {/* Subtle background glow on hover */}
+                        <div
+                            className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none"
+                            style={{ background: `radial-gradient(circle at center, ${link.color}, transparent 70%)` }}
+                        />
                     </motion.a>
                 ))}
             </div>
