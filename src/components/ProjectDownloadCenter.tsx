@@ -34,11 +34,11 @@ export default function ProjectDownloadCenter() {
                 <div className="flex items-center gap-2 mb-1">
                     <Package className="w-4 h-4 text-[var(--luxury-gold)]" />
                     <h3 className="text-xl font-bold gold-text-gradient">
-                        Releases
+                        Currently Project App
                     </h3>
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] opacity-60 uppercase tracking-widest">
-                    Production Ready
+                    Production Completed
                 </p>
             </div>
 

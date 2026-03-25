@@ -84,7 +84,7 @@ export default function GitHubRepos() {
                 <div className="flex items-center gap-2 mb-1">
                     <Github className="w-4 h-4 text-[var(--luxury-gold)]" />
                     <h3 className="text-xl font-bold gold-text-gradient">
-                        Open Source
+                        Github Repository
                     </h3>
                 </div>
                 <p className="text-xs text-[var(--text-secondary)] opacity-60 uppercase tracking-widest">
